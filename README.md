@@ -188,9 +188,8 @@ The backend is fully deployed and tested. All endpoints are working and ready fo
 
 ## 🎯 Production Ready
 
-The backend is **100% complete and deployed** at:
-- **API**: https://server-production-b292.up.railway.app
-- **WebSocket**: wss://server-production-b292.up.railway.app
+The backend is **100% complete and deployed** 
+
 
 This iOS app is ready to connect to the live backend and start real-time communication immediately after adding the Socket.io dependency.
 
