@@ -1,9 +1,6 @@
-//
 //  NoteViewModel.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import Foundation
 import Combine
@@ -69,10 +66,8 @@ class NoteViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Socket Listeners
     
     private func setupSocketListeners() {
-        // Listen for note updates from other users
         socketService.$noteUpdated
             .compactMap { $0 }
             .filter { [weak self] note in
@@ -83,7 +78,6 @@ class NoteViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        // Listen for typing indicators
         socketService.$userTypingInNote
             .compactMap { $0 }
             .filter { [weak self] (chatId, _, _) in
@@ -95,10 +89,8 @@ class NoteViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    // MARK: - Auto-Save Setup
     
     private func setupAutoSave() {
-        // Auto-save after 2 seconds of inactivity
         $noteContent
             .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
             .sink { [weak self] content in
@@ -107,7 +99,6 @@ class NoteViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    // MARK: - Note Loading
     
     @MainActor
     func loadNote() {
@@ -133,7 +124,6 @@ class NoteViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Note Saving
     
     private func autoSaveNote() {
         guard !noteContent.isEmpty,
@@ -165,7 +155,6 @@ class NoteViewModel: ObservableObject {
                     body: requestData
                 )
                 
-                // Also emit via socket for real-time updates
                 socketService.updateNote(
                     chatId: chatId,
                     content: noteContent,
@@ -184,30 +173,23 @@ class NoteViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Remote Updates
     
     private func handleRemoteNoteUpdate(_ updatedNote: Note) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            // Handle conflict resolution
             if updatedNote.version > self.lastKnownVersion {
-                // Remote version is newer, update local content
                 self.note = updatedNote
                 self.noteContent = updatedNote.content
                 self.lastKnownVersion = updatedNote.version
             }
-            // If versions conflict, you might want to implement more sophisticated
-            // conflict resolution (e.g., showing a merge dialog)
         }
     }
     
-    // MARK: - Typing Indicators
     
     func startTyping() {
         socketService.sendNoteTypingIndicator(chatId: chatId, isTyping: true)
         
-        // Reset timer
         typingTimer?.invalidate()
         typingTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
             self?.stopTyping()
@@ -223,7 +205,6 @@ class NoteViewModel: ObservableObject {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            // Don't show current user's typing
             guard user.id != self.currentUser?.id else { return }
             
             if isTyping {
@@ -236,7 +217,6 @@ class NoteViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Helper Methods
     
     var typingText: String {
         guard !typingUsers.isEmpty else { return "" }

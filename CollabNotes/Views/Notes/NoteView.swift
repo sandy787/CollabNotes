@@ -1,9 +1,6 @@
-//
 //  NoteView.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import SwiftUI
 
@@ -19,13 +16,10 @@ struct NoteView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Header Info
                 headerView
                 
-                // Note Editor
                 editorView
                 
-                // Status Bar
                 statusBar
             }
             .navigationTitle("Shared Note")
@@ -53,11 +47,9 @@ struct NoteView: View {
         .navigationViewStyle(StackNavigationViewStyle())
     }
     
-    // MARK: - Header View
     
     private var headerView: some View {
         VStack(spacing: 8) {
-            // Collaborators Info
             if !viewModel.collaboratorNames.isEmpty {
                 HStack {
                     Image(systemName: "person.2.circle")
@@ -71,7 +63,6 @@ struct NoteView: View {
                 }
             }
             
-            // Last Edited Info
             if !viewModel.lastEditedInfo.isEmpty {
                 HStack {
                     Image(systemName: "clock")
@@ -85,7 +76,6 @@ struct NoteView: View {
                 }
             }
             
-            // Typing Indicator
             if !viewModel.typingText.isEmpty {
                 HStack {
                     HStack(spacing: 4) {
@@ -118,7 +108,6 @@ struct NoteView: View {
         .background(Color(.systemGroupedBackground))
     }
     
-    // MARK: - Editor View
     
     private var editorView: some View {
         Group {
@@ -144,7 +133,6 @@ struct NoteView: View {
     
     private var noteEditor: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Editor
             TextEditor(text: $viewModel.noteContent)
                 .focused($isEditorFocused)
                 .font(.body)
@@ -154,7 +142,6 @@ struct NoteView: View {
                     viewModel.startTyping()
                 }
                 .overlay(
-                    // Placeholder when empty
                     Group {
                         if viewModel.noteContent.isEmpty {
                             VStack {
@@ -173,14 +160,12 @@ struct NoteView: View {
         }
     }
     
-    // MARK: - Status Bar
     
     private var statusBar: some View {
         VStack(spacing: 0) {
             Divider()
             
             HStack {
-                // Save Status
                 HStack(spacing: 4) {
                     if viewModel.isSaving {
                         ProgressView()
@@ -198,7 +183,6 @@ struct NoteView: View {
                 
                 Spacer()
                 
-                // Word count
                 if !viewModel.noteContent.isEmpty {
                     Text("\(wordCount) words")
                         .font(.caption)
@@ -211,7 +195,6 @@ struct NoteView: View {
         }
     }
     
-    // MARK: - Computed Properties
     
     private var wordCount: Int {
         let words = viewModel.noteContent.components(separatedBy: .whitespacesAndNewlines)
@@ -219,7 +202,6 @@ struct NoteView: View {
     }
 }
 
-// MARK: - Preview
 
 #Preview {
     NoteView(chatId: "sample-chat-id")

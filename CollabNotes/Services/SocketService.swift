@@ -1,9 +1,6 @@
-//
 //  SocketService.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import Foundation
 import Combine
@@ -27,21 +24,17 @@ class SocketService: ObservableObject {
     @Published var isConnected = false
     @Published var connectionError: String?
     
-    // Message events
     @Published var newMessage: Message?
     @Published var userTypingInChat: (chatId: String, user: User, isTyping: Bool)?
     
-    // User presence events
     @Published var userOnline: User?
     @Published var userOffline: User?
     
-    // Note events
     @Published var noteUpdated: Note?
     @Published var userTypingInNote: (chatId: String, user: User, isTyping: Bool)?
     
     private init() {}
     
-    // MARK: - Connection Management
     
     func connect() {
         guard let token = keychainService.getJWTToken() else {
@@ -77,10 +70,8 @@ class SocketService: ObservableObject {
         }
     }
     
-    // MARK: - Event Handlers Setup
     
     private func setupEventHandlers() {
-        // Connection events
         socket?.on(clientEvent: .connect) { [weak self] _, _ in
             DispatchQueue.main.async {
                 self?.isConnected = true
@@ -100,7 +91,6 @@ class SocketService: ObservableObject {
             }
         }
         
-        // Message events
         socket?.on(SocketEvents.newMessage) { [weak self] data, _ in
             if let messageData = data.first as? [String: Any],
                let jsonData = try? JSONSerialization.data(withJSONObject: messageData),
@@ -124,7 +114,6 @@ class SocketService: ObservableObject {
             }
         }
         
-        // User presence events
         socket?.on(SocketEvents.userOnline) { [weak self] data, _ in
             if let userData = data.first as? [String: Any],
                let jsonData = try? JSONSerialization.data(withJSONObject: userData),
@@ -145,7 +134,6 @@ class SocketService: ObservableObject {
             }
         }
         
-        // Note events
         socket?.on(SocketEvents.noteUpdated) { [weak self] data, _ in
             if let noteData = data.first as? [String: Any],
                let jsonData = try? JSONSerialization.data(withJSONObject: noteData),
@@ -170,7 +158,6 @@ class SocketService: ObservableObject {
         }
     }
     
-    // MARK: - Emit Events
     
     func joinChats(chatIds: [String]) {
         socket?.emit(SocketEvents.joinChats, chatIds)
@@ -205,7 +192,6 @@ class SocketService: ObservableObject {
         ])
     }
     
-    // MARK: - Helper Methods
     
     func clearMessages() {
         newMessage = nil

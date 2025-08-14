@@ -1,9 +1,6 @@
-//
 //  KeychainService.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import Foundation
 import Security
@@ -54,7 +51,6 @@ class KeychainService {
         return status == errSecSuccess
     }
     
-    // MARK: - Convenience methods for string values
     
     func saveString(key: String, value: String) -> Bool {
         guard let data = value.data(using: .utf8) else { return false }
@@ -66,7 +62,6 @@ class KeychainService {
         return String(data: data, encoding: .utf8)
     }
     
-    // MARK: - App-specific methods
     
     func saveJWTToken(_ token: String) -> Bool {
         return saveString(key: KeychainKeys.jwtToken, value: token)

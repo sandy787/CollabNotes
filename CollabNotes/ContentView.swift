@@ -1,9 +1,6 @@
-//
 //  ContentView.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import SwiftUI
 
@@ -16,11 +13,9 @@ struct ContentView: View {
             if authService.isAuthenticated {
                 ChatListView()
                     .onAppear {
-                        // Connect to socket when user is authenticated
                         socketService.connect()
                     }
                     .onDisappear {
-                        // Disconnect when leaving the app
                         socketService.disconnect()
                     }
             } else {

@@ -23,8 +23,6 @@ class AuthService: ObservableObject {
         checkAuthenticationStatus()
     }
     
-    // MARK: - Authentication Status
-    
     func checkAuthenticationStatus() {
         if let token = keychainService.getJWTToken(), !token.isEmpty {
             Task {
@@ -37,8 +35,6 @@ class AuthService: ObservableObject {
             }
         }
     }
-    
-    // MARK: - Register
     
     @MainActor
     func register(email: String, password: String, name: String) async {
@@ -56,7 +52,6 @@ class AuthService: ObservableObject {
                 requiresAuth: false
             )
             
-            // Save token and user info
             _ = keychainService.saveJWTToken(response.token)
             _ = keychainService.saveUserID(response.user.id)
             
@@ -69,8 +64,6 @@ class AuthService: ObservableObject {
         
         isLoading = false
     }
-    
-    // MARK: - Login
     
     @MainActor
     func login(email: String, password: String) async {
@@ -88,7 +81,6 @@ class AuthService: ObservableObject {
                 requiresAuth: false
             )
             
-            // Save token and user info
             _ = keychainService.saveJWTToken(response.token)
             _ = keychainService.saveUserID(response.user.id)
             
@@ -102,7 +94,6 @@ class AuthService: ObservableObject {
         isLoading = false
     }
     
-    // MARK: - Get Current User
     
     @MainActor
     func getCurrentUser() async {
@@ -115,16 +106,13 @@ class AuthService: ObservableObject {
             currentUser = user
             isAuthenticated = true
             
-            // Update stored user ID if needed
             _ = keychainService.saveUserID(user.id)
             
         } catch {
-            // If we can't get current user, clear auth
             logout()
         }
     }
     
-    // MARK: - Logout
     
     @MainActor
     func logout() {
@@ -134,7 +122,6 @@ class AuthService: ObservableObject {
         errorMessage = nil
     }
     
-    // MARK: - Validation Methods
     
     func validateEmail(_ email: String) -> String? {
         if email.trimmed.isEmpty {
@@ -166,7 +153,6 @@ class AuthService: ObservableObject {
         return nil
     }
     
-    // MARK: - Helper Methods
     
     func clearError() {
         errorMessage = nil

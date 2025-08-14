@@ -60,7 +60,6 @@ struct User: Codable, Identifiable, Equatable, Hashable {
         hasher.combine(id)
     }
     
-    // Convenience initializer for creating User instances
     init(id: String, email: String, name: String, avatar: String? = nil, isOnline: Bool = false, lastSeen: Date = Date()) {
         self.id = id
         self.email = email

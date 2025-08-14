@@ -1,9 +1,6 @@
-//
 //  APIService.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import Foundation
 import Combine
@@ -17,7 +14,6 @@ class APIService: ObservableObject {
     
     private init() {}
     
-    // MARK: - Generic Request Method
     
     func request<T: Codable>(
         endpoint: String,
@@ -33,7 +29,6 @@ class APIService: ObservableObject {
         request.httpMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        // Add authorization header if required and token exists
         if requiresAuth, let token = keychainService.getJWTToken() {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
@@ -49,16 +44,13 @@ class APIService: ObservableObject {
                 throw APIError.invalidResponse
             }
             
-            // Handle different status codes
             switch httpResponse.statusCode {
             case 200...299:
                 break
             case 401:
-                // Token expired or invalid
                 keychainService.clearAll()
                 throw APIError.unauthorized
             case 400...499:
-                // Try to parse error message from response
                 if let errorData = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                    let message = errorData["message"] as? String {
                     throw APIError.serverError(message)
@@ -86,7 +78,6 @@ class APIService: ObservableObject {
         }
     }
     
-    // MARK: - Request with no response body
     
     func requestWithoutResponse(
         endpoint: String,
@@ -134,7 +125,6 @@ class APIService: ObservableObject {
         }
     }
     
-    // MARK: - Convenience methods for encoding request bodies
     
     func encode<T: Codable>(_ object: T) throws -> Data {
         return try JSONEncoder().encode(object)

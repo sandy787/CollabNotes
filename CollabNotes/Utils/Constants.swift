@@ -1,9 +1,6 @@
-//
 //  Constants.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import Foundation
 
@@ -27,14 +24,12 @@ struct KeychainKeys {
 }
 
 struct SocketEvents {
-    // Client emits
     static let joinChats = "join-chats"
     static let sendMessage = "send-message"
     static let typingMessage = "typing-message"
     static let updateNote = "update-note"
     static let typingNote = "typing-note"
     
-    // Server emits
     static let newMessage = "new-message"
     static let userOnline = "user-online"
     static let userOffline = "user-offline"

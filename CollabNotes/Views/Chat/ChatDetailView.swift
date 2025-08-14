@@ -1,9 +1,6 @@
-//
 //  ChatDetailView.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import SwiftUI
 
@@ -21,15 +18,12 @@ struct ChatDetailView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Messages List
                 messagesView
                 
-                // Typing Indicator
                 if !viewModel.typingText.isEmpty {
                     typingIndicatorView
                 }
                 
-                // Message Input
                 messageInputView
             }
             .navigationTitle(viewModel.chatDisplayName)
@@ -50,7 +44,6 @@ struct ChatDetailView: View {
                         }
                         
                         Button(action: {
-                            // Future: Chat settings
                         }) {
                             Label("Chat Info", systemImage: "info.circle")
                         }
@@ -72,7 +65,6 @@ struct ChatDetailView: View {
         .navigationViewStyle(StackNavigationViewStyle())
     }
     
-    // MARK: - Messages View
     
     private var messagesView: some View {
         Group {
@@ -134,7 +126,6 @@ struct ChatDetailView: View {
             }
             .background(Color.chatBackground)
             .onChange(of: viewModel.messages.count) { _ in
-                // Scroll to bottom when new message arrives
                 if let lastMessage = viewModel.messages.last {
                     withAnimation(.easeOut(duration: 0.3)) {
                         proxy.scrollTo(lastMessage.id, anchor: .bottom)
@@ -142,7 +133,6 @@ struct ChatDetailView: View {
                 }
             }
             .onAppear {
-                // Scroll to bottom when view appears
                 if let lastMessage = viewModel.messages.last {
                     proxy.scrollTo(lastMessage.id, anchor: .bottom)
                 }
@@ -150,7 +140,6 @@ struct ChatDetailView: View {
         }
     }
     
-    // MARK: - Typing Indicator
     
     private var typingIndicatorView: some View {
         HStack {
@@ -180,14 +169,12 @@ struct ChatDetailView: View {
         .background(Color.chatBackground)
     }
     
-    // MARK: - Message Input
     
     private var messageInputView: some View {
         VStack(spacing: 0) {
             Divider()
             
             HStack(spacing: 12) {
-                // Message TextField
                 TextField("Message", text: $viewModel.messageText, axis: .vertical)
                     .textFieldStyle(PlainTextFieldStyle())
                     .padding(.horizontal, 16)
@@ -204,7 +191,6 @@ struct ChatDetailView: View {
                         viewModel.sendMessage()
                     }
                 
-                // Send Button
                 Button(action: {
                     viewModel.sendMessage()
                 }) {
@@ -221,7 +207,6 @@ struct ChatDetailView: View {
     }
 }
 
-// MARK: - Message Bubble View
 
 struct MessageBubbleView: View {
     let message: Message
@@ -231,7 +216,6 @@ struct MessageBubbleView: View {
     
     var body: some View {
         VStack(alignment: isFromCurrentUser ? .trailing : .leading, spacing: 4) {
-            // Sender name (for group chats)
             if showSenderName {
                 Text(message.sender.name)
                     .font(.caption)
@@ -239,7 +223,6 @@ struct MessageBubbleView: View {
                     .padding(.horizontal, 4)
             }
             
-            // Message content
             HStack {
                 if isFromCurrentUser {
                     Spacer(minLength: 60)
@@ -253,7 +236,6 @@ struct MessageBubbleView: View {
                 }
             }
             
-            // Timestamp
             if showTimestamp {
                 Text(message.createdAt.messageTimeDisplay())
                     .font(.caption2)
@@ -265,10 +247,8 @@ struct MessageBubbleView: View {
     }
 }
 
-// MARK: - Preview
 
 #Preview {
-    // Create a sample chat for preview
     let sampleUser = User(
         id: "1",
         email: "demo@example.com",

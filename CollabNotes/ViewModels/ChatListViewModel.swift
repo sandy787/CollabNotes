@@ -1,9 +1,6 @@
-//
 //  ChatListViewModel.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import Foundation
 import Combine
@@ -38,10 +35,8 @@ class ChatListViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Socket Listeners
     
     private func setupSocketListeners() {
-        // Listen for new messages to update chat list
         socketService.$newMessage
             .compactMap { $0 }
             .sink { [weak self] message in
@@ -49,7 +44,6 @@ class ChatListViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        // Listen for user presence updates
         socketService.$userOnline
             .compactMap { $0 }
             .sink { [weak self] user in
@@ -65,7 +59,6 @@ class ChatListViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    // MARK: - Data Loading
     
     @MainActor
     func loadChats() {
@@ -81,7 +74,6 @@ class ChatListViewModel: ObservableObject {
                 
                 chats = response.chats.sorted { $0.lastActivity > $1.lastActivity }
                 
-                // Join all chats via socket
                 let chatIds = chats.map { $0.id }
                 socketService.joinChats(chatIds: chatIds)
                 
@@ -114,7 +106,6 @@ class ChatListViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Chat Creation
     
     @MainActor
     func createDirectChat(with user: User) async -> Chat? {
@@ -132,11 +123,9 @@ class ChatListViewModel: ObservableObject {
                 body: requestData
             )
             
-            // Add to local list and sort
             chats.append(newChat)
             chats.sort { $0.lastActivity > $1.lastActivity }
             
-            // Join the new chat
             socketService.joinChats(chatIds: [newChat.id])
             
             return newChat
@@ -163,11 +152,9 @@ class ChatListViewModel: ObservableObject {
                 body: requestData
             )
             
-            // Add to local list and sort
             chats.append(newChat)
             chats.sort { $0.lastActivity > $1.lastActivity }
             
-            // Join the new chat
             socketService.joinChats(chatIds: [newChat.id])
             
             return newChat
@@ -178,7 +165,6 @@ class ChatListViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Update Methods
     
     private func updateChatWithNewMessage(_ message: Message) {
         DispatchQueue.main.async { [weak self] in
@@ -187,7 +173,6 @@ class ChatListViewModel: ObservableObject {
             if let index = self.chats.firstIndex(where: { $0.id == message.chatId }) {
                 let existingChat = self.chats[index]
                 
-                // Create updated chat with new message
                 let updatedChat = Chat(
                     id: existingChat.id,
                     name: existingChat.name,
@@ -199,7 +184,6 @@ class ChatListViewModel: ObservableObject {
                     updatedAt: message.createdAt
                 )
                 
-                // Replace and re-sort
                 self.chats[index] = updatedChat
                 self.chats.sort { $0.lastActivity > $1.lastActivity }
             }
@@ -211,15 +195,12 @@ class ChatListViewModel: ObservableObject {
             for (participantIndex, participant) in chat.participants.enumerated() {
                 if participant.id == user.id {
                     var updatedParticipant = participant
-                    // Update online status (would need to modify User struct for this)
-                    // For now, we'll rely on fresh data from API calls
                     break
                 }
             }
         }
     }
     
-    // MARK: - Helper Methods
     
     func clearError() {
         errorMessage = nil
@@ -233,7 +214,6 @@ class ChatListViewModel: ObservableObject {
         if chat.isGroup {
             return chat.name ?? "Group Chat"
         } else {
-            // For direct chats, show the other participant's name
             let otherParticipant = chat.participants.first { $0.id != currentUser.id }
             return otherParticipant?.name ?? "Unknown User"
         }

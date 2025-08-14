@@ -1,9 +1,6 @@
-//
 //  ChatViewModel.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import Foundation
 import Combine
@@ -44,10 +41,8 @@ class ChatViewModel: ObservableObject {
         guard let currentUser = currentUser else { return false }
         
         if chat.isGroup {
-            // For group chats, show if any other participant is online
             return chat.participants.contains { $0.id != currentUser.id && $0.isOnline }
         } else {
-            // For direct chats, show the other participant's status
             let otherParticipant = chat.participants.first { $0.id != currentUser.id }
             return otherParticipant?.isOnline ?? false
         }
@@ -61,10 +56,8 @@ class ChatViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Socket Listeners
     
     private func setupSocketListeners() {
-        // Listen for new messages in this chat
         socketService.$newMessage
             .compactMap { $0 }
             .filter { [weak self] message in
@@ -75,7 +68,6 @@ class ChatViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        // Listen for typing indicators
         socketService.$userTypingInChat
             .compactMap { $0 }
             .filter { [weak self] (chatId, _, _) in
@@ -87,7 +79,6 @@ class ChatViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    // MARK: - Message Loading
     
     @MainActor
     func loadMessages() {
@@ -111,7 +102,6 @@ class ChatViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Message Sending
     
     @MainActor
     func sendMessage() {
@@ -133,14 +123,10 @@ class ChatViewModel: ObservableObject {
                     body: requestData
                 )
                 
-                // Also emit via socket for real-time delivery
                 socketService.sendMessage(chatId: chat.id, content: content)
                 
-                // Message will be added via socket listener or we can add it directly
-                // addMessage(response.message)
                 
             } catch {
-                // Restore message text on error
                 messageText = originalMessageText
                 errorMessage = error.localizedDescription
             }
@@ -149,12 +135,10 @@ class ChatViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Typing Indicators
     
     func startTyping() {
         socketService.sendTypingIndicator(chatId: chat.id, isTyping: true)
         
-        // Reset timer
         typingTimer?.invalidate()
         typingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] _ in
             self?.stopTyping()
@@ -170,7 +154,6 @@ class ChatViewModel: ObservableObject {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            // Don't show current user's typing
             guard user.id != self.currentUser?.id else { return }
             
             if isTyping {
@@ -183,13 +166,11 @@ class ChatViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Message Management
     
     private func addMessage(_ message: Message) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            // Avoid duplicates
             guard !self.messages.contains(where: { $0.id == message.id }) else { return }
             
             self.messages.append(message)
@@ -197,17 +178,14 @@ class ChatViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Helper Methods
     
     func isMessageFromCurrentUser(_ message: Message) -> Bool {
         return message.sender.id == currentUser?.id
     }
     
     func shouldShowSenderName(for message: Message, at index: Int) -> Bool {
-        // Always show for group chats, unless it's from current user
         guard chat.isGroup && !isMessageFromCurrentUser(message) else { return false }
         
-        // Show if it's the first message or if the previous message is from a different sender
         if index == 0 {
             return true
         }
@@ -217,7 +195,6 @@ class ChatViewModel: ObservableObject {
     }
     
     func shouldShowTimestamp(for message: Message, at index: Int) -> Bool {
-        // Show timestamp if it's the last message or if the next message is from a different sender or more than 5 minutes later
         guard index < messages.count - 1 else { return true }
         
         let nextMessage = messages[index + 1]

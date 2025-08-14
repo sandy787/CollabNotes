@@ -1,9 +1,6 @@
-//
 //  AuthView.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import SwiftUI
 
@@ -19,19 +16,14 @@ struct AuthView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Header
                     headerSection
                     
-                    // Form
                     formSection
                     
-                    // Submit Button
                     submitButton
                     
-                    // Toggle Mode
                     toggleModeButton
                     
-                    // Error Message
                     if let errorMessage = viewModel.errorMessage {
                         errorSection(errorMessage)
                     }
@@ -48,7 +40,6 @@ struct AuthView: View {
         }
     }
     
-    // MARK: - Header Section
     
     private var headerSection: some View {
         VStack(spacing: 16) {
@@ -67,11 +58,9 @@ struct AuthView: View {
         .padding(.bottom, 32)
     }
     
-    // MARK: - Form Section
     
     private var formSection: some View {
         VStack(spacing: 16) {
-            // Email Field
             VStack(alignment: .leading, spacing: 8) {
                 TextField("Email", text: $viewModel.email)
                     .textFieldStyle(CustomTextFieldStyle())
@@ -93,7 +82,6 @@ struct AuthView: View {
                 }
             }
             
-            // Name Field (Register only)
             if !viewModel.isLoginMode {
                 VStack(alignment: .leading, spacing: 8) {
                     TextField("Full Name", text: $viewModel.name)
@@ -111,7 +99,6 @@ struct AuthView: View {
                 }
             }
             
-            // Password Field
             VStack(alignment: .leading, spacing: 8) {
                 SecureField("Password", text: $viewModel.password)
                     .textFieldStyle(CustomTextFieldStyle())
@@ -133,7 +120,6 @@ struct AuthView: View {
                 }
             }
             
-            // Confirm Password Field (Register only)
             if !viewModel.isLoginMode {
                 VStack(alignment: .leading, spacing: 8) {
                     SecureField("Confirm Password", text: $viewModel.confirmPassword)
@@ -155,7 +141,6 @@ struct AuthView: View {
         }
     }
     
-    // MARK: - Submit Button
     
     private var submitButton: some View {
         Button(action: {
@@ -186,7 +171,6 @@ struct AuthView: View {
         .padding(.top, 8)
     }
     
-    // MARK: - Toggle Mode Button
     
     private var toggleModeButton: some View {
         Button(action: {
@@ -200,7 +184,6 @@ struct AuthView: View {
         .padding(.top, 16)
     }
     
-    // MARK: - Error Section
     
     private func errorSection(_ message: String) -> some View {
         HStack {
@@ -220,7 +203,6 @@ struct AuthView: View {
     }
 }
 
-// MARK: - Custom Text Field Style
 
 struct CustomTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
@@ -235,7 +217,6 @@ struct CustomTextFieldStyle: TextFieldStyle {
     }
 }
 
-// MARK: - Preview
 
 #Preview {
     AuthView()

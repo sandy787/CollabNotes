@@ -1,9 +1,6 @@
-//
 //  NewChatView.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import SwiftUI
 
@@ -18,7 +15,6 @@ struct NewChatView: View {
     
     let onChatCreated: (Chat) -> Void
     
-    // Demo users for testing - replace with actual user search
     private let demoUsers: [User] = [
         User(id: "1", email: "demo@example.com", name: "Demo User", avatar: nil, isOnline: true, lastSeen: Date()),
         User(id: "2", email: "user2@example.com", name: "John Doe", avatar: nil, isOnline: false, lastSeen: Date().addingTimeInterval(-3600)),
@@ -44,15 +40,12 @@ struct NewChatView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Search Bar
                 searchBar
                 
-                // Selected Users (if any)
                 if !selectedUsers.isEmpty {
                     selectedUsersView
                 }
                 
-                // Users List
                 usersList
             }
             .navigationTitle("New Chat")
@@ -85,7 +78,6 @@ struct NewChatView: View {
         }
     }
     
-    // MARK: - Search Bar
     
     private var searchBar: some View {
         HStack {
@@ -111,7 +103,6 @@ struct NewChatView: View {
         .padding(.vertical, 8)
     }
     
-    // MARK: - Selected Users View
     
     private var selectedUsersView: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -163,7 +154,6 @@ struct NewChatView: View {
         .cornerRadius(16)
     }
     
-    // MARK: - Users List
     
     private var usersList: some View {
         List {
@@ -180,7 +170,6 @@ struct NewChatView: View {
         .listStyle(PlainListStyle())
     }
     
-    // MARK: - Actions
     
     private func toggleUserSelection(_ user: User) {
         if selectedUsers.contains(user) {
@@ -229,7 +218,6 @@ struct NewChatView: View {
     }
 }
 
-// MARK: - User Row View
 
 struct UserRowView: View {
     let user: User
@@ -239,7 +227,6 @@ struct UserRowView: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
-                // Avatar
                 Circle()
                     .fill(Color.blue)
                     .frame(width: 44, height: 44)
@@ -250,7 +237,6 @@ struct UserRowView: View {
                             .foregroundColor(.white)
                     )
                 
-                // User Info
                 VStack(alignment: .leading, spacing: 2) {
                     Text(user.name)
                         .font(.headline)
@@ -269,7 +255,6 @@ struct UserRowView: View {
                 
                 Spacer()
                 
-                // Selection Indicator
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.title3)
@@ -287,17 +272,13 @@ struct UserRowView: View {
     }
 }
 
-// MARK: - ChatListViewModel Extension
 
 extension ChatListViewModel {
     static var shared: ChatListViewModel? {
-        // In a real app, you'd use proper dependency injection
-        // For now, we'll create a new instance
         return nil
     }
 }
 
-// MARK: - Preview
 
 #Preview {
     NewChatView { _ in }

@@ -1,9 +1,6 @@
-//
 //  Extensions.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import Foundation
 import SwiftUI
@@ -65,7 +62,6 @@ extension Color {
     static let offlineGray = Color.gray
 }
 
-// MARK: - Custom ViewModifiers
 
 struct MessageBubble: ViewModifier {
     let isFromCurrentUser: Bool

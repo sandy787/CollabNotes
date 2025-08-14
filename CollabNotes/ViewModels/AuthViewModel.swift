@@ -1,9 +1,6 @@
-//
 //  AuthViewModel.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import Foundation
 import Combine
@@ -37,7 +34,6 @@ class AuthViewModel: ObservableObject {
     }
     
     init() {
-        // Clear errors when text changes
         $email
             .sink { [weak self] _ in
                 self?.emailError = nil
@@ -67,7 +63,6 @@ class AuthViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    // MARK: - Actions
     
     func toggleMode() {
         isLoginMode.toggle()
@@ -103,7 +98,6 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Validation
     
     private func validateLoginForm() -> Bool {
         var isValid = true
@@ -147,7 +141,6 @@ class AuthViewModel: ObservableObject {
         return isValid
     }
     
-    // MARK: - Helper Methods
     
     private func clearFields() {
         email = ""
@@ -164,7 +157,6 @@ class AuthViewModel: ObservableObject {
         authService.clearError()
     }
     
-    // MARK: - Computed Properties
     
     var canSubmit: Bool {
         if isLoginMode {

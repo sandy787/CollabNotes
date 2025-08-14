@@ -36,11 +36,9 @@ struct Message: Codable, Identifiable, Equatable {
         messageType = try container.decode(String.self, forKey: .messageType)
         readBy = try container.decodeIfPresent([ReadStatus].self, forKey: .readBy)
         
-        // Handle sender - could be User object or string ID
         if let senderUser = try? container.decode(User.self, forKey: .sender) {
             sender = senderUser
         } else if let senderID = try? container.decode(String.self, forKey: .sender) {
-            // Create a placeholder user when only ID is provided
             sender = User(id: senderID, email: "", name: "Unknown User")
         } else {
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath, debugDescription: "Could not decode sender"))
@@ -81,7 +79,6 @@ struct Message: Codable, Identifiable, Equatable {
         return lhs.id == rhs.id
     }
     
-    // Convenience initializer for creating Message instances
     init(id: String, chatId: String, sender: User, content: String, messageType: String = "text", createdAt: Date = Date(), editedAt: Date? = nil, readBy: [ReadStatus]? = nil) {
         self.id = id
         self.chatId = chatId

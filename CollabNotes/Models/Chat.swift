@@ -1,9 +1,10 @@
 //
 //  Chat.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
+//  Chat.swift
+//  CollabNotes
+//  Created by prajwal sanap on 08/08/25.
 
 import Foundation
 
@@ -75,7 +76,6 @@ struct Chat: Codable, Identifiable, Equatable {
         return lhs.id == rhs.id
     }
     
-    // Convenience initializer for creating Chat instances
     init(id: String, name: String? = nil, participants: [User], isGroup: Bool, lastMessage: Message? = nil, lastActivity: Date = Date(), createdAt: Date = Date(), updatedAt: Date = Date()) {
         self.id = id
         self.name = name
@@ -92,9 +92,7 @@ struct Chat: Codable, Identifiable, Equatable {
             return name
         }
         
-        // For non-group chats, show the other participant's name
         if !isGroup && participants.count == 2 {
-            // This would need current user context to filter out self
             return participants.first?.name ?? "Unknown"
         }
         

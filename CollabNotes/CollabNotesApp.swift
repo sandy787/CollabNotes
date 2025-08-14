@@ -1,9 +1,6 @@
-//
 //  CollabNotesApp.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import SwiftUI
 
@@ -18,7 +15,6 @@ struct CollabNotesApp: App {
                 .environmentObject(authService)
                 .environmentObject(socketService)
                 .onAppear {
-                    // Check authentication status on app launch
                     authService.checkAuthenticationStatus()
                 }
         }

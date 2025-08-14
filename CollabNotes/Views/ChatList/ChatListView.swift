@@ -1,9 +1,6 @@
-//
 //  ChatListView.swift
 //  CollabNotes
-//
 //  Created by prajwal sanap on 08/08/25.
-//
 
 import SwiftUI
 
@@ -16,10 +13,8 @@ struct ChatListView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Search Bar
                 searchBar
                 
-                // Chat List
                 chatList
             }
             .navigationTitle("Chats")
@@ -49,7 +44,6 @@ struct ChatListView: View {
         .navigationViewStyle(StackNavigationViewStyle())
     }
     
-    // MARK: - Search Bar
     
     private var searchBar: some View {
         HStack {
@@ -75,7 +69,6 @@ struct ChatListView: View {
         .padding(.top, 8)
     }
     
-    // MARK: - Chat List
     
     private var chatList: some View {
         Group {
@@ -98,7 +91,6 @@ struct ChatListView: View {
         }
     }
     
-    // MARK: - Loading View
     
     private var loadingView: some View {
         VStack(spacing: 16) {
@@ -112,7 +104,6 @@ struct ChatListView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    // MARK: - Empty State View
     
     private var emptyStateView: some View {
         VStack(spacing: 24) {
@@ -140,7 +131,6 @@ struct ChatListView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    // MARK: - Toolbar Items
     
     private var profileButton: some View {
         Button(action: {
@@ -180,7 +170,6 @@ struct ChatListView: View {
     }
 }
 
-// MARK: - Chat Row View
 
 struct ChatRowView: View {
     let chat: Chat
@@ -208,10 +197,8 @@ struct ChatRowView: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
-                // Avatar
                 avatarView
                 
-                // Content
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text(displayName)
@@ -244,7 +231,6 @@ struct ChatRowView: View {
                     }
                 }
                 
-                // Online indicator
                 if !chat.isGroup, let participant = otherParticipant, participant.isOnline {
                     Circle()
                         .fill(Color.green)
@@ -265,7 +251,6 @@ struct ChatRowView: View {
     private var avatarView: some View {
         Group {
             if chat.isGroup {
-                // Group avatar
                 ZStack {
                     Circle()
                         .fill(Color.orange)
@@ -276,7 +261,6 @@ struct ChatRowView: View {
                         .foregroundColor(.white)
                 }
             } else {
-                // Individual avatar
                 Circle()
                     .fill(Color.blue)
                     .frame(width: 50, height: 50)
@@ -291,7 +275,6 @@ struct ChatRowView: View {
     }
 }
 
-// MARK: - Preview
 
 #Preview {
     ChatListView()
